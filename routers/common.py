@@ -1,3 +1,5 @@
+# pylint: disable=raise-missing-from
+
 from http import HTTPStatus
 from logging import getLogger
 from typing import Any, cast
@@ -10,6 +12,7 @@ from fastapi.exceptions import HTTPException
 
 from business.channels import import_channels
 from business.writers import import_writer
+from schemas.topics import TopicContentFactory
 
 logger = getLogger(__name__)
 
@@ -24,10 +27,13 @@ async def notify_topic(request: Request, topic: Topic, template: Template, paylo
     user = cast(User, request.state.user)
 
     if template.topic != topic:
-        raise HTTPException(HTTPStatus.BAD_REQUEST, detail=f"Topic {topic} doesn't have {template} template")
+        raise HTTPException(HTTPStatus.NOT_FOUND)
+
+    if not (content := TopicContentFactory.create_topic_content(topic, payload)):
+        raise HTTPException(HTTPStatus.UNPROCESSABLE_ENTITY)
 
     writer = import_writer(topic, template)(user)
 
     for channel in import_channels(user):
-        message = writer.write_message(channel, payload)
+        message = writer.write_message(channel, content)
         channel.send(message=message)
