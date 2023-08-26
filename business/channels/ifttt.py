@@ -8,7 +8,7 @@ from pydantic import Field
 
 from models.channel import Channel
 from models.message import Message
-from utils.constants import PUSH_NOTIFICATIONS_QUEUE
+from utils.constants import IFTTT_QUEUE
 
 
 class IFTTTMessage(Message):
@@ -32,7 +32,7 @@ class IFTTT(Channel):
         """
         create_http_task(
             url=self.url,
-            queue=PUSH_NOTIFICATIONS_QUEUE,
+            queue=IFTTT_QUEUE,
             payload=json.loads(message.model_dump_json()),
             task_id="IFTTT-WEBHOOK",
             is_internal=False,
