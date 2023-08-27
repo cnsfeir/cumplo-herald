@@ -39,4 +39,4 @@ build:
 
 # Starts the API server
 start:
-	docker run -d -p 8080:8080 -v ./:/app --env-file .env cumplo-herald
+	docker run -d -p 8001:8080 -v ./:/app --env-file .env cumplo-herald
