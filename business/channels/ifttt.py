@@ -1,7 +1,5 @@
 # mypy: disable-error-code="override"
 
-import json
-
 from cumplo_common.integrations.cloud_tasks import create_http_task
 from cumplo_common.models.channel import ChannelType, IFTTTConfiguration
 from pydantic import Field
@@ -33,7 +31,7 @@ class IFTTT(Channel):
         create_http_task(
             url=self.url,
             queue=IFTTT_QUEUE,
-            payload=json.loads(message.model_dump_json()),
+            payload=message.model_dump(),
             task_id="IFTTT-WEBHOOK",
             is_internal=False,
         )
