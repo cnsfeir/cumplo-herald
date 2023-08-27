@@ -15,7 +15,7 @@ def import_channels(user: User) -> Iterator[Channel]:
     """
     for channel_type, channel_configuration in user.channels.items():
         try:
-            module = import_module(f"channels.{channel_type}")
+            module = import_module(f"business.channels.{channel_type}")
             channel = getattr(module, "channel")
             yield channel(channel_configuration)
 
