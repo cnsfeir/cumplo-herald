@@ -4,9 +4,12 @@ from typing import Protocol
 
 from cumplo_common.models.user import User
 
-from models.channel import Channel
-from models.message import Message
-from schemas.topics import TopicContent
+from cumplo_herald.models.channel import Channel
+from cumplo_herald.models.message import Message
+
+
+class TopicContent(Protocol):
+    id: int
 
 
 class Writer(Protocol):

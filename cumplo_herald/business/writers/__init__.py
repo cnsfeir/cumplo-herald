@@ -5,7 +5,7 @@ from caseconverter import pascalcase, snakecase
 from cumplo_common.models.template import Template
 from cumplo_common.models.topic import Topic
 
-from models.writer import Writer
+from cumplo_herald.models.writer import Writer
 
 logger = getLogger(__name__)
 
