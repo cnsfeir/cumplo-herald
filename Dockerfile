@@ -29,7 +29,7 @@ ENV PIP_NO_CACHE_DIR=off \
 
 # Install OS package dependencies
 RUN apt-get update && \
-    apt-get install -y libpq-dev gcc && \
+    apt-get install --fix-missing -y libpq-dev gcc && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Poetry
@@ -51,8 +51,8 @@ ENV GOOGLE_APPLICATION_CREDENTIALS=/tmp/service-account-credentials.json
 # Save the service account key contents from the build argument to the temporary file.
 RUN echo $CUMPLO_PYPI_BASE64_KEY | base64 -d> $GOOGLE_APPLICATION_CREDENTIALS
 
-# Install base dependencies + REST API dependencies
-RUN poetry install --without dev --with rest-api && rm -rf /tmp/poetry_cache
+# Install dependencies
+RUN poetry install --without dev && rm -rf /tmp/poetry_cache
 
 # Remove the service acccount key file.
 RUN rm $GOOGLE_APPLICATION_CREDENTIALS
