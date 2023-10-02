@@ -3,11 +3,10 @@ from logging import getLogger
 from cumplo_common.models.topic import Topic
 from pydantic import TypeAdapter
 
-from schemas.topics.funding_requests import FundingRequestContent
+from cumplo_herald.models.topics.funding_requests import FundingRequestContent
+from cumplo_herald.models.writer import TopicContent
 
 logger = getLogger(__name__)
-
-TopicContent = FundingRequestContent
 
 
 class TopicContentFactory:

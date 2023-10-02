@@ -33,10 +33,12 @@ linters:
 	poetry run python -m pylint --rcfile=.pylintrc --recursive=y --ignore=.venv --disable=fixme .
 	poetry run python -m mypy --config-file mypy.ini .
 
-# Builds the docker image
 build:
-	docker build -f Dockerfile.development -t cumplo-herald .
+	docker-compose build cumplo-herald --no-cache  \
+	--build-arg CUMPLO_PYPI_BASE64_KEY=`base64 -i cumplo-pypi-credentials.json`
 
-# Starts the API server
 start:
-	docker run -d -p 8001:8080 -v ./:/app --env-file .env cumplo-herald
+	docker-compose up -d cumplo-herald
+
+down:
+	docker-compose down

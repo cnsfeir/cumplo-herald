@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  cumplo-herald:
+    image: cumplo-herald
+    env_file: .env
+    ports:
+      - 8001:8080
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+      args: 
+        - CUMPLO_PYPI_BASE64_KEY
+    volumes:
+      - ./cumplo_herald:/app/cumplo_herald
+      - /app/.venv

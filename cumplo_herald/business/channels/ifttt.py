@@ -4,9 +4,9 @@ from cumplo_common.integrations.cloud_tasks import create_http_task
 from cumplo_common.models.channel import ChannelType, IFTTTConfiguration
 from pydantic import Field
 
-from models.channel import Channel
-from models.message import Message
-from utils.constants import IFTTT_QUEUE
+from cumplo_herald.models.channel import Channel
+from cumplo_herald.models.message import Message
+from cumplo_herald.utils.constants import IFTTT_QUEUE
 
 
 class IFTTTMessage(Message):

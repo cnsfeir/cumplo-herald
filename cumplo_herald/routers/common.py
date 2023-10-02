@@ -10,9 +10,10 @@ from cumplo_common.models.user import User
 from fastapi import APIRouter, Request
 from fastapi.exceptions import HTTPException
 
-from business.channels import import_channels
-from business.writers import import_writer
-from schemas.topics import TopicContentFactory
+from cumplo_herald.business.channels import import_channels
+from cumplo_herald.business.content import already_notified
+from cumplo_herald.business.writers import import_writer
+from cumplo_herald.models.topics import TopicContentFactory
 
 logger = getLogger(__name__)
 
@@ -31,6 +32,9 @@ async def notify_topic(request: Request, topic: Topic, template: Template, paylo
 
     if not (content := TopicContentFactory.create_topic_content(topic, payload)):
         raise HTTPException(HTTPStatus.UNPROCESSABLE_ENTITY)
+
+    if already_notified(user, template, content):
+        raise HTTPException(HTTPStatus.CONFLICT)
 
     writer = import_writer(topic, template)(user)
 
