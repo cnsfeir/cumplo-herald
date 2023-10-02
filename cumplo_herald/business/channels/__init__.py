@@ -18,7 +18,7 @@ def import_channels(user: User) -> Iterator[Channel]:
             logger.info(f"Channel {channel_type} is disabled")
             continue
         try:
-            module = import_module(f"business.channels.{channel_type}")
+            module = import_module(f"cumplo_herald.business.channels.{channel_type.lower()}")
             channel = getattr(module, "channel")
             yield channel(channel_configuration)
 

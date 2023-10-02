@@ -14,6 +14,6 @@ def import_writer(topic: Topic, template: Template) -> type[Writer]:
     """
     Imports the writer class for the given topic and template
     """
-    module = import_module(f"business.writers.{snakecase(topic)}")
+    module = import_module(f"cumplo_herald.business.writers.{snakecase(topic)}")
     writer = getattr(module, pascalcase(f"{template}-{topic}-writer"))
     return writer
