@@ -3,7 +3,6 @@ name = "cumplo-herald"
 version = "0.1.0"
 description = "A multi-channel notification service designed to keep Cumplo investors ahead with real-time alerts"
 authors = ["Cristobal Sfeir <cnsfeir@uc.cl>"]
-readme = "README.md"
 packages = [{ include = "cumplo_herald" }]
 
 [tool.poetry.dependencies]
