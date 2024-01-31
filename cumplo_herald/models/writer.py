@@ -8,7 +8,7 @@ from cumplo_herald.models.channel import Channel
 from cumplo_herald.models.message import Message
 
 
-class TopicContent(Protocol):
+class SubjectContent(Protocol):
     id: int
 
 
@@ -16,5 +16,5 @@ class Writer(Protocol):
     def __init__(self, user: User) -> None:
         ...
 
-    def write_message(self, channel: Channel, content: TopicContent) -> Message:
+    def write_message(self, channel: Channel, content: SubjectContent) -> Message:
         ...
