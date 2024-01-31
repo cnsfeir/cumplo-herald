@@ -4,7 +4,7 @@ services:
     image: cumplo-herald
     env_file: .env
     ports:
-      - 8001:8080
+      - 8002:8080
     build:
       context: .
       dockerfile: Dockerfile.development
