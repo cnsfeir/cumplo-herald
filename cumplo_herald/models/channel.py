@@ -17,5 +17,5 @@ class Channel(ABC):
     @abstractmethod
     def send(self, message: Model) -> None:
         """
-        Writes the message about the given topic to be sent through the given channel
+        Writes the message about the given subject to be sent through the given channel
         """
