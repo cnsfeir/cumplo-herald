@@ -420,13 +420,13 @@ test-randomorder = ["pytest-randomly"]
 
 [[package]]
 name = "cumplo-common"
-version = "0.6.6"
+version = "0.6.8"
 description = "A one-stop library that centralizes the core logic and protects the domain of the Cumplo API project"
 optional = false
 python-versions = ">=3.11,<4.0"
 files = [
-    {file = "cumplo_common-0.6.6-py3-none-any.whl", hash = "sha256:4fd683f5f4344df67f48e72cab95b3cf4c894a51d6fa915cb4d114f9c35becb7"},
-    {file = "cumplo_common-0.6.6.tar.gz", hash = "sha256:76f56a123adfc1e6b89a8debbda287f4b652def8c01f7fd6ad1d017d58efb74d"},
+    {file = "cumplo_common-0.6.8-py3-none-any.whl", hash = "sha256:8707499b95695e8e43f4d640fb15a544f00f934f21ae0d6dd881a83a5ac9d6fc"},
+    {file = "cumplo_common-0.6.8.tar.gz", hash = "sha256:1ca6f35fac88a5fcb9d3dbf9c10d1d65aa4b34efe87e1b4638722616478f1948"},
 ]
 
 [package.dependencies]
@@ -517,13 +517,13 @@ pyflakes = ">=3.1.0,<3.2.0"
 
 [[package]]
 name = "google-api-core"
-version = "2.17.0"
+version = "2.17.1"
 description = "Google API client core library"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google-api-core-2.17.0.tar.gz", hash = "sha256:de7ef0450faec7c75e0aea313f29ac870fdc44cfaec9d6499a9a17305980ef66"},
-    {file = "google_api_core-2.17.0-py3-none-any.whl", hash = "sha256:08ed79ed8e93e329de5e3e7452746b734e6bf8438d8d64dd3319d21d3164890c"},
+    {file = "google-api-core-2.17.1.tar.gz", hash = "sha256:9df18a1f87ee0df0bc4eea2770ebc4228392d8cc4066655b320e2cfccb15db95"},
+    {file = "google_api_core-2.17.1-py3-none-any.whl", hash = "sha256:610c5b90092c360736baccf17bd3efbcb30dd380e7a6dc28a71059edb8bd0d8e"},
 ]
 
 [package.dependencies]
@@ -1773,4 +1773,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "3f1c761d0e3379664a1d9d7f6a29ed8e32f50f5eb061f3e4238c3089ca245028"
+content-hash = "8495156ef657129902789153f0628410782f0bb375c6f01b387d95a69743d2e7"
