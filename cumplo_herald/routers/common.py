@@ -4,8 +4,10 @@ from http import HTTPStatus
 from logging import getLogger
 from typing import cast
 
-from cumplo_common.models.template import Template
+from cumplo_common.database import firestore
+from cumplo_common.models.notification import Notification
 from cumplo_common.models.subject import Subject
+from cumplo_common.models.template import Template
 from cumplo_common.models.user import User
 from fastapi import APIRouter, Request
 from fastapi.exceptions import HTTPException
@@ -41,3 +43,6 @@ async def notify_subject(request: Request, subject: Subject, template: Template,
     for channel in import_channels(user):
         message = writer.write_message(channel, content)
         channel.send(message=message)
+
+        id_notification = Notification.build_id(template, content.id)
+        firestore.client.notifications.put(str(user.id), id_notification)
