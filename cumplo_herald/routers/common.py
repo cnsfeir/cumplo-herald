@@ -36,7 +36,7 @@ async def notify_subject(request: Request, subject: Subject, template: Template,
         raise HTTPException(HTTPStatus.UNPROCESSABLE_ENTITY)
 
     if already_notified(user, template, content):
-        raise HTTPException(HTTPStatus.CONFLICT)
+        raise HTTPException(HTTPStatus.ALREADY_REPORTED)
 
     writer = import_writer(subject, template)(user)
 
