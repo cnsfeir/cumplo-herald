@@ -22,7 +22,7 @@ class IFTTT(Channel):
     @property
     def url(self) -> str:
         """Builds the IFTTT trigger URL to send the message to"""
-        return f"https://maker.ifttt.com/trigger/test/with/key/{self.configuration.key}"
+        return f"https://maker.ifttt.com/trigger/{self.configuration.event}/with/key/{self.configuration.key}"
 
     def send(self, message: IFTTTMessage) -> None:
         """
