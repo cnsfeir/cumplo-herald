@@ -14,7 +14,7 @@ google-cloud-logging = "^3.5.0"
 fastapi = "^0.109.1"
 uvicorn = "^0.23.1"
 case-converter = "^1.1.0"
-cumplo-common = { version = "^1.2.0", source = "cumplo-pypi" }
+cumplo-common = { version = "^1.2.1", source = "cumplo-pypi" }
 twilio = "^9.0.2"
 
 [tool.poetry.dev-dependencies]
