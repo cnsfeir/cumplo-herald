@@ -13,14 +13,14 @@ def import_channels(user: User) -> Iterator[Channel]:
     """
     Imports the channels for the given user.
     """
-    for channel_type, channel_configuration in user.channels.items():
+    for channel_configuration in user.channels.values():
         if not channel_configuration.enabled:
-            logger.info(f"Channel {channel_type} is disabled")
+            logger.info(f"Channel {channel_configuration.id} is disabled")
             continue
         try:
-            module = import_module(f"cumplo_herald.business.channels.{channel_type.lower()}")
+            module = import_module(f"cumplo_herald.business.channels.{channel_configuration.type_.lower()}")
             channel = getattr(module, "channel")
             yield channel(channel_configuration)
 
         except (ImportError, AttributeError) as exception:
-            raise NotImplementedError(f"Channel {channel_type} is not implemented.") from exception
+            raise NotImplementedError(f"Channel {channel_configuration.type_} is not implemented.") from exception
