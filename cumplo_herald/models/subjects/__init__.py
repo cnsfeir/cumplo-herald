@@ -12,9 +12,7 @@ logger = getLogger(__name__)
 class SubjectContentFactory:
     @staticmethod
     def create_subject_content(subject: Subject, payload: dict) -> SubjectContent | None:
-        """
-        Creates a new SubjectContent class.
-        """
+        """Create a new SubjectContent class."""
         try:
             match subject:
                 case Subject.FUNDING_REQUESTS:

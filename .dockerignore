@@ -14,3 +14,4 @@
 
 # Include: credentials
 !cumplo-herald-credentials.json
+!cumplo-pypi-credentials.json

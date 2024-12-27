@@ -21,13 +21,11 @@ class IFTTT(Channel):
 
     @property
     def url(self) -> str:
-        """Builds the IFTTT trigger URL to send the message to"""
+        """Builds the IFTTT trigger URL to send the message to."""
         return f"https://maker.ifttt.com/trigger/{self.configuration.event}/with/key/{self.configuration.key}"
 
     def send(self, message: IFTTTMessage) -> None:
-        """
-        Sends the message to the user.
-        """
+        """Send the message to the user."""
         create_http_task(
             url=self.url,
             queue=IFTTT_QUEUE,

@@ -11,7 +11,11 @@ logger = getLogger(__name__)
 
 def import_channels(user: User) -> Iterator[Channel]:
     """
-    Imports the channels for the given user.
+    Import the channels for the given user.
+
+    Yields:
+        Channel: An instance of a Channel.
+
     """
     for channel_configuration in user.channels.values():
         if not channel_configuration.enabled:
@@ -19,7 +23,7 @@ def import_channels(user: User) -> Iterator[Channel]:
             continue
         try:
             module = import_module(f"cumplo_herald.business.channels.{channel_configuration.type_.lower()}")
-            channel = getattr(module, "channel")
+            channel = module.channel
             yield channel(channel_configuration)
 
         except (ImportError, AttributeError) as exception:
