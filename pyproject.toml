@@ -14,8 +14,9 @@ google-cloud-logging = "^3.5.0"
 fastapi = "^0.109.1"
 uvicorn = "^0.23.1"
 case-converter = "^1.1.0"
-cumplo-common = { version = "^1.2.1", source = "cumplo-pypi" }
+cumplo-common = { version = "^1.3.2", source = "cumplo-pypi" }
 twilio = "^9.0.2"
+overrides = "^7.7.0"
 
 [tool.poetry.dev-dependencies]
 ruff = "^0.7.1"
@@ -50,6 +51,7 @@ module = [
     "starlette.*",
     "google.cloud.pubsub.*",
     "numpy_financial.*",
+    "twilio.*",
 ]
 ignore_missing_imports = true
 
@@ -76,14 +78,7 @@ ignore = [
     "DOC201", # Missing documentation for `return` in docstring
     "COM812", # Missing trailing comma in a dictionary
     "ISC001", # Implicit string concatenation
-    # =====
-    "PT011",  # ValueError is too broad, set the `match` parameter
-    "PT013",  # Incorrect import of `pytest`; use `import pytest` instead
-    "FBT003", # Boolean positional value in function call
-    "D102",   # Missing docstring in public method
-    "EM101",  # Exception must not use a string literal, assign to variable first
-    "DOC501", # Raised exception `ValueError` missing from docstring
-    "TRY003", # Avoid specifying long messages outside the exception class
+    "CPY001", # Copying notice
     "EM102",  # Exception must not use an f-string literal, assign to variable first
 ]
 

@@ -1,48 +1,46 @@
-# pylint: disable=raise-missing-from
-
 from http import HTTPStatus
 from logging import getLogger
 from typing import cast
 
 from cumplo_common.database import firestore
+from cumplo_common.models.event import Event
 from cumplo_common.models.notification import Notification
-from cumplo_common.models.subject import Subject
-from cumplo_common.models.template import Template
 from cumplo_common.models.user import User
-from fastapi import APIRouter, Request
-from fastapi.exceptions import HTTPException
+from fastapi import APIRouter, HTTPException, Request
 
-from cumplo_herald.business.channels import import_channels
-from cumplo_herald.business.content import already_notified
-from cumplo_herald.business.writers import import_writer
-from cumplo_herald.models.subjects import SubjectContentFactory
+from cumplo_herald.adapters.channels import CHANNELS_BY_TYPE
 
 logger = getLogger(__name__)
 
 router = APIRouter()
 
 
-@router.post("/{subject}/{template}/notify", status_code=HTTPStatus.NO_CONTENT)
-async def notify_subject(request: Request, subject: Subject, template: Template, payload: dict) -> None:
+@router.post("/{event}/notify", status_code=HTTPStatus.NO_CONTENT)
+async def notify_event(request: Request, event: Event, payload: dict) -> None:
     """
-    Notifies the given subject with the given template and payload.
+    Notifies the given event with the given payload through the user's channels.
+
+    Raises:
+        HTTPException: If the notification was already sent (status 208 ALREADY_REPORTED)
+
     """
     user = cast(User, request.state.user)
+    content = event.model.model_validate(payload)
 
-    if template.subject != subject:
-        raise HTTPException(HTTPStatus.NOT_FOUND)
-
-    if not (content := SubjectContentFactory.create_subject_content(subject, payload)):
-        raise HTTPException(HTTPStatus.UNPROCESSABLE_ENTITY)
-
-    if already_notified(user, template, content):
+    if user.already_notified(event, content):
         raise HTTPException(HTTPStatus.ALREADY_REPORTED)
 
-    writer = import_writer(subject, template)(user)
+    for channel_configuration in user.channels.values():
+        if not channel_configuration.enabled:
+            logger.info(f"Channel {channel_configuration.id} is disabled")
+            continue
 
-    for channel in import_channels(user):
-        message = writer.write_message(channel, content)
-        channel.send(message=message)
+        if not channel_configuration.event_enabled(event):
+            logger.info(f"Channel {channel_configuration.id} is not enabled for event {event}")
+            continue
 
-        id_notification = Notification.build_id(template, content.id)
+        channel = CHANNELS_BY_TYPE[channel_configuration.type_](user, channel_configuration)
+        channel.notify(event, content)
+
+        id_notification = Notification.build_id(event, content.id)
         firestore.client.notifications.put(str(user.id), id_notification)
