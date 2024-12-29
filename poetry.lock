@@ -534,8 +534,8 @@ description = "A one-stop library that centralizes the core logic and protects t
 optional = false
 python-versions = ">=3.12,<4.0"
 files = [
-    {file = "cumplo_common-1.3.2-py3-none-any.whl", hash = "sha256:203c5cb39ad3add3c59a7b7e2d4bc43f0bb781e7d8a106f1aafca80f7d248651"},
-    {file = "cumplo_common-1.3.2.tar.gz", hash = "sha256:1d8dc9a6f94b7083e8daaedc096e50e952e9edaa86efce473cc44177d354962c"},
+    {file = "cumplo_common-1.3.2-py3-none-any.whl", hash = "sha256:5cbf9c23c2800fae78f5b24026c6d864b8fb086186b0ba9974aa495ff54aa34e"},
+    {file = "cumplo_common-1.3.2.tar.gz", hash = "sha256:63b7e868efd2554c8e26f61b3e4107a201c720ab5802aac7ff163b15a60a1332"},
 ]
 
 [package.dependencies]
