@@ -4,10 +4,7 @@ from decimal import Decimal
 from logging import getLogger
 from typing import Any, override
 
-from cumplo_common.models import FundingRequest
-from cumplo_common.models.channel import ChannelType, WhatsappConfiguration
-from cumplo_common.models.event import Event
-from cumplo_common.models.user import User
+from cumplo_common.models import ChannelType, FundingRequest, PublicEvent, User, WhatsappConfiguration
 from pydantic import Field
 from twilio.rest import Client
 
@@ -33,7 +30,7 @@ class Whatsapp(Channel):
         self.client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
     @override
-    def send(self, event: Event, message: Message) -> None:
+    def send(self, event: PublicEvent, message: Message) -> None:
         """Send the message to the user."""
         logger.info(f"Sending message: {message.model_dump_json()}")
         self.client.messages.create(

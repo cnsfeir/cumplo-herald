@@ -3,9 +3,8 @@ from logging import getLogger
 from typing import cast
 
 from cumplo_common.database import firestore
-from cumplo_common.models.event import Event
-from cumplo_common.models.notification import Notification
-from cumplo_common.models.user import User
+from cumplo_common.integrations.cloud_pubsub import CloudPubSub
+from cumplo_common.models import Notification, PrivateEvent, PublicEvent, User
 from fastapi import APIRouter, HTTPException, Request
 
 from cumplo_herald.adapters.channels import CHANNELS_BY_TYPE
@@ -16,7 +15,7 @@ router = APIRouter()
 
 
 @router.post("/{event}/notify", status_code=HTTPStatus.NO_CONTENT)
-async def notify_event(request: Request, event: Event, payload: dict) -> None:
+async def notify_event(request: Request, event: PublicEvent, payload: dict) -> None:
     """
     Notifies the given event with the given payload through the user's channels.
 
@@ -42,5 +41,7 @@ async def notify_event(request: Request, event: Event, payload: dict) -> None:
         channel = CHANNELS_BY_TYPE[channel_configuration.type_](user, channel_configuration)
         channel.notify(event, content)
 
-        id_notification = Notification.build_id(event, content.id)
-        firestore.client.notifications.put(str(user.id), id_notification)
+    notification = Notification.new(event=event, content_id=content.id)
+    user.notifications[notification.id] = notification
+    firestore.client.users.put(user)
+    CloudPubSub.publish(content=user.json(), topic=PrivateEvent.USER_NOTIFICATIONS_UPDATED, id_user=str(user.id))

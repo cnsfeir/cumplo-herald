@@ -12,6 +12,8 @@ from cumplo_herald.utils.constants import IS_TESTING, LOG_FORMAT
 for module in ("google", "urllib3", "werkzeug"):
     getLogger(module).setLevel(CRITICAL)
 
+getLogger("cumplo_common").setLevel(DEBUG)
+
 if IS_TESTING:
     basicConfig(level=DEBUG, format=LOG_FORMAT)
 else:

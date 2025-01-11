@@ -2,9 +2,7 @@ from decimal import Decimal
 from typing import override
 
 from cumplo_common.integrations.cloud_tasks import CloudTasks
-from cumplo_common.models import FundingRequest
-from cumplo_common.models.channel import ChannelType, IFTTTConfiguration
-from cumplo_common.models.event import Event
+from cumplo_common.models import ChannelType, FundingRequest, IFTTTConfiguration, PublicEvent
 from pydantic import Field
 
 from cumplo_herald.ports.channel import Channel, Message
@@ -27,7 +25,7 @@ class IFTTT(Channel):
         return f"https://maker.ifttt.com/trigger/{self.configuration.event}/with/key/{self.configuration.key}"
 
     @override
-    def send(self, event: Event, message: Message) -> None:
+    def send(self, event: PublicEvent, message: Message) -> None:
         """Send the message to the user."""
         CloudTasks.create_task(
             url=self.url,
