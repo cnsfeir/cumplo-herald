@@ -1,10 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Protocol, final
 
-from cumplo_common.models import FundingRequest
-from cumplo_common.models.channel import ChannelConfiguration, ChannelType
-from cumplo_common.models.event import Event
-from cumplo_common.models.user import User
+from cumplo_common.models import ChannelConfiguration, ChannelType, FundingRequest, PublicEvent, User
 from overrides import EnforceOverrides
 from pydantic import BaseModel
 
@@ -29,22 +26,22 @@ class Channel(EnforceOverrides, ABC):
         self.user = user
 
     @final
-    def notify(self, event: Event, content: ChannelPayload) -> None:
+    def notify(self, event: PublicEvent, content: ChannelPayload) -> None:
         """Notify the given channel with the given content."""
         message = self.write(event, content)
         self.send(event, message)
 
     @final
-    def write(self, event: Event, content: Any) -> Message:
+    def write(self, event: PublicEvent, content: Any) -> Message:
         """Write the given event with the given payload."""
         match event:
-            case Event.FUNDING_REQUEST_PROMISING:
+            case PublicEvent.FUNDING_REQUEST_PROMISING:
                 return self._write_funding_request_promising(content)
 
         raise NotImplementedError(f"Event {event} not implemented")
 
     @abstractmethod
-    def send(self, event: Event, message: Message) -> None:
+    def send(self, event: PublicEvent, message: Message) -> None:
         """Send the given content to the given channel."""
 
     @abstractmethod
