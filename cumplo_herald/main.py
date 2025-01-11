@@ -1,4 +1,4 @@
-from logging import CRITICAL, DEBUG, basicConfig, getLogger
+from logging import DEBUG, ERROR, basicConfig, getLogger
 
 import google.cloud.logging
 from cumplo_common.dependencies.authentication import authenticate
@@ -9,8 +9,8 @@ from cumplo_herald.routers import common
 from cumplo_herald.utils.constants import IS_TESTING, LOG_FORMAT
 
 # NOTE: Mute noisy third-party loggers
-for module in ("google", "urllib3", "werkzeug"):
-    getLogger(module).setLevel(CRITICAL)
+for module in ("google", "urllib3", "werkzeug", "twilio"):
+    getLogger(module).setLevel(ERROR)
 
 getLogger("cumplo_common").setLevel(DEBUG)
 
