@@ -46,13 +46,13 @@ class Whatsapp(Channel):
         """Write the message for the funding_request.promising event."""
 
         class WhatsappMessage(Message):
-            user: str = Field(min_length=1)
             score: Decimal = Field(ge=0, le=1)
             borrower: str = Field(min_length=1)
             duration: str = Field(min_length=1)
             credit_type: str = Field(min_length=1)
             funding_request_id: str = Field(min_length=1)
             monthly_profit_rate: Decimal = Field(ge=0, le=100)
+            installments: int = Field(...)
 
         monthly_profit_rate = round(Decimal(content.monthly_profit_rate * 100), ndigits=2)
 
@@ -61,11 +61,11 @@ class Whatsapp(Channel):
         borrower = borrower or "unknown"
 
         return WhatsappMessage(
-            user=self.user.name,
             score=content.score,
             borrower=borrower.title(),
             duration=str(content.duration),
             credit_type=content.credit_type.title(),
             funding_request_id=str(content.id),
             monthly_profit_rate=monthly_profit_rate,
+            installments=content.installments,
         )
