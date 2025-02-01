@@ -52,7 +52,7 @@ class Whatsapp(Channel):
             credit_type: str = Field(min_length=1)
             funding_request_id: str = Field(min_length=1)
             monthly_profit_rate: Decimal = Field(ge=0, le=100)
-            installments: int = Field(...)
+            installments: str = Field(...)
 
         monthly_profit_rate = round(Decimal(content.monthly_profit_rate * 100), ndigits=2)
 
@@ -67,5 +67,5 @@ class Whatsapp(Channel):
             credit_type=content.credit_type.title(),
             funding_request_id=str(content.id),
             monthly_profit_rate=monthly_profit_rate,
-            installments=content.installments,
+            installments=str(content.installments),
         )
