@@ -10,8 +10,8 @@ from cumplo_herald.utils.constants import IFTTT_QUEUE
 
 
 class IFTTTMessage(Message):
-    value1: str = Field(..., alias="title")
-    value2: str = Field(..., alias="message")
+    value1: str = Field(..., alias="message")
+    value2: str = Field(..., alias="title")
     value3: str = Field(..., alias="url")
 
 
@@ -41,7 +41,7 @@ class IFTTT(Channel):
         """Write the message for the funding_request.promising event."""
         monthly_profit_rate = round(Decimal(content.monthly_profit_rate * 100), ndigits=2)
         return IFTTTMessage(
-            title=f"💹 {monthly_profit_rate}% | ⏳ {content.duration} | 🎖️ {content.score}",
-            message=f"N° {content.id} - {content.credit_type.title()}",
+            message=f"💹 {monthly_profit_rate}% | ⏳ {content.duration} | 🎖️ {content.score}",
+            title=f"N° {content.id} - {content.credit_type.title()}",
             url=content.url,
         )
