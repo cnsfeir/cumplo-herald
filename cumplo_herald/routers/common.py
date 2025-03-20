@@ -1,3 +1,4 @@
+from copy import deepcopy
 from http import HTTPStatus
 from logging import getLogger
 from typing import cast
@@ -49,7 +50,7 @@ async def notify_event(request: Request, event: PublicEvent, payload: dict) -> N
 async def clear_notifications() -> None:
     """Delete all expired notifications for all users."""
     for user in firestore.client.users.list():
-        for key, notification in user.notifications.items():
+        for key, notification in deepcopy(user.notifications).items():
             if notification.has_expired:
                 del user.notifications[key]
 
