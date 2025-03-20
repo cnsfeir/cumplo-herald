@@ -1,10 +1,10 @@
+from copy import deepcopy
 from http import HTTPStatus
 from logging import getLogger
 from typing import cast
 
 from cumplo_common.database import firestore
-from cumplo_common.integrations.cloud_pubsub import CloudPubSub
-from cumplo_common.models import Notification, PrivateEvent, PublicEvent, User
+from cumplo_common.models import Notification, PublicEvent, User
 from fastapi import APIRouter, HTTPException, Request
 
 from cumplo_herald.adapters.channels import CHANNELS_BY_TYPE
@@ -44,4 +44,16 @@ async def notify_event(request: Request, event: PublicEvent, payload: dict) -> N
     notification = Notification.new(event=event, content_id=content.id)
     user.notifications[notification.id] = notification
     firestore.client.users.put(user)
-    CloudPubSub.publish(content=user.json(), topic=PrivateEvent.USER_NOTIFICATIONS_UPDATED, id_user=str(user.id))
+
+
+@router.post("/notifications/clear", status_code=HTTPStatus.NO_CONTENT)
+async def clear_notifications() -> None:
+    """Delete all expired notifications for all users."""
+    for user in firestore.client.users.list():
+        logger.info(f"Clearing expired notifications for user {user.name}")
+        for key, notification in deepcopy(user.notifications).items():
+            if notification.has_expired:
+                logger.info(f"Deleting expired notification {key} for user {user.name}")
+                del user.notifications[key]
+
+        firestore.client.users.put(user)
