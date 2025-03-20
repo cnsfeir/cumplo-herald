@@ -50,8 +50,10 @@ async def notify_event(request: Request, event: PublicEvent, payload: dict) -> N
 async def clear_notifications() -> None:
     """Delete all expired notifications for all users."""
     for user in firestore.client.users.list():
+        logger.info(f"Clearing expired notifications for user {user.name}")
         for key, notification in deepcopy(user.notifications).items():
             if notification.has_expired:
+                logger.info(f"Deleting expired notification {key} for user {user.name}")
                 del user.notifications[key]
 
         firestore.client.users.put(user)
