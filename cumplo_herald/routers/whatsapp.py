@@ -73,15 +73,21 @@ async def whatsapp_webhook(
         logger.error(f"Notification {id_notification} not found for user {id_user}")
         return
 
-    if text.casefold() == TwilioQuickReply.DISMISS:
-        notification.dismissed = True
-        user.notifications[id_notification] = notification
-        firestore.client.users.update(user, "notifications")
-        response = f"*Funding Request N° {notification.content_id}*\n🔕 *Dismissed*"
+    response = None
+    match text.casefold():
+        case TwilioQuickReply.DISMISS:
+            notification.dismissed = True
+            user.notifications[id_notification] = notification
+            firestore.client.users.update(user, "notifications")
+            response = f"*Funding Request N° {notification.content_id}*\n🔕 *Dismissed*"
+        case _:
+            logger.warning(f"Unknown button text: {text}")
 
     if not sender or not sender.startswith("whatsapp:"):
         logger.error("No sender phone number provided in WhatsApp webhook")
         return
 
-    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-    client.messages.create(to=sender, from_=f"whatsapp:{TWILIO_SENDER_PHONE_NUMBER}", body=response)
+    if response:
+        logger.info(f"Sending WhatsApp response to {sender}: {response}")
+        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+        client.messages.create(to=sender, from_=f"whatsapp:{TWILIO_SENDER_PHONE_NUMBER}", body=response)
