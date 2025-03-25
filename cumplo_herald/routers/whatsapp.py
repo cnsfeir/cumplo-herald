@@ -25,7 +25,7 @@ class TwilioQuickReply(StrEnum):
     DISMISS = "dismiss"
 
 
-async def validate_twilio_request(request: Request) -> None:
+async def validate_twilio_request(request: Request) -> bool:
     """Validate that the request actually came from Twilio."""
     # NOTE: Use the original URL from the forwarded headers if available
     # This handles the case when requests come through API Gateway
