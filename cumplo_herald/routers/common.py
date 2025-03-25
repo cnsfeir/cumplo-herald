@@ -26,7 +26,7 @@ async def notify_event(request: Request, event: PublicEvent, payload: dict) -> N
     user = cast(User, request.state.user)
     content = event.model.model_validate(payload)
 
-    if user.already_notified(event, content):
+    if not user.should_notify(event, content):
         raise HTTPException(HTTPStatus.ALREADY_REPORTED)
 
     for channel_configuration in user.channels.values():
