@@ -88,6 +88,6 @@ async def whatsapp_webhook(
         return
 
     if response:
-        logger.info(f"Sending WhatsApp response to {sender}: {response}")
+        logger.info(f"Replying '{text}' message to {sender}")
         client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
         client.messages.create(to=sender, from_=f"whatsapp:{TWILIO_SENDER_PHONE_NUMBER}", body=response)
