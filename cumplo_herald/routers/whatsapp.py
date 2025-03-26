@@ -1,12 +1,18 @@
 from enum import StrEnum
+from http import HTTPStatus
 from logging import getLogger
 
 from cumplo_common.database import firestore
-from fastapi import APIRouter, Depends, Form, Request
+from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from twilio.request_validator import RequestValidator
 from twilio.rest import Client
 
-from cumplo_herald.utils.constants import TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_SENDER_PHONE_NUMBER
+from cumplo_herald.utils.constants import (
+    TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN,
+    TWILIO_SENDER_PHONE_NUMBER,
+    TWILIO_WEBHOOK_URL,
+)
 
 logger = getLogger(__name__)
 
@@ -27,14 +33,10 @@ class TwilioQuickReply(StrEnum):
 
 async def validate_twilio_request(request: Request) -> bool:
     """Validate that the request actually came from Twilio."""
-    url = "https://cumplo-api-gateway-2o0ertl5.uc.gateway.dev/whatsapp/messages"
-    logger.info(f"Validating Twilio request with URL: {url}")
-
     form_data = await request.form()
     signature = request.headers.get("x-twilio-signature", "")
     validator = RequestValidator(TWILIO_AUTH_TOKEN)
-
-    return validator.validate(url, dict(form_data), signature)
+    return validator.validate(TWILIO_WEBHOOK_URL, dict(form_data), signature)
 
 
 @router.post("/messages")
@@ -45,10 +47,16 @@ async def whatsapp_webhook(
     message_type: str | None = Form(None, alias="MessageType"),
     valid: bool = Depends(validate_twilio_request),  # noqa: FBT001
 ) -> None:
-    """Handle WhatsApp webhook requests for button responses."""
-    # if not valid:
-    #     raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail="Invalid Twilio signature")
-    logger.info(f"The received request is valid: {valid}")
+    """
+    Handle WhatsApp webhook requests for button responses.
+
+    Raises:
+        HTTPException: If the request is invalid.
+
+    """
+    if not valid:
+        logger.warning("Invalid Twilio signature")
+        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
 
     if not payload or not text or message_type != TwilioMessageType.BUTTON:
         logger.warning("Twilio webhook is missing required fields")
