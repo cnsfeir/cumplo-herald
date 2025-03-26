@@ -27,17 +27,7 @@ class TwilioQuickReply(StrEnum):
 
 async def validate_twilio_request(request: Request) -> bool:
     """Validate that the request actually came from Twilio."""
-    # NOTE: Use the original URL from the forwarded headers if available
-    # This handles the case when requests come through API Gateway
-    forwarded_proto = request.headers.get("x-forwarded-proto")
-    forwarded_host = request.headers.get("x-forwarded-host")
-
-    if forwarded_proto and forwarded_host:
-        url = f"{forwarded_proto}://{forwarded_host}{request.url.path}"
-    else:
-        # NOTE: Fallback to the request URL if forwarded headers aren't available
-        url = str(request.url)
-
+    url = "https://cumplo-api-gateway-2o0ertl5.uc.gateway.dev/whatsapp/messages"
     logger.info(f"Validating Twilio request with URL: {url}")
 
     form_data = await request.form()
