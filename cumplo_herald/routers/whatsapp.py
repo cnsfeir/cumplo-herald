@@ -58,6 +58,7 @@ async def whatsapp_webhook(
     """Handle WhatsApp webhook requests for button responses."""
     # if not valid:
     #     raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail="Invalid Twilio signature")
+    logger.info(f"The received request is valid: {valid}")
 
     if not payload or not text or message_type != TwilioMessageType.BUTTON:
         logger.warning("Twilio webhook is missing required fields")
