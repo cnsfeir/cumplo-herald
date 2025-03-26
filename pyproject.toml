@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cumplo-herald"
-version = "1.2.0"
+version = "1.3.0"
 description = "A multi-channel notification service designed to keep Cumplo investors ahead with real-time alerts"
 authors = ["Cristobal Sfeir <cnsfeir@uc.cl>"]
 packages = [{ include = "cumplo_herald" }]

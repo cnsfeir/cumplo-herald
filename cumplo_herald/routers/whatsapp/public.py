@@ -75,6 +75,9 @@ async def whatsapp_webhook(
     response = None
     match text.casefold():
         case TwilioQuickReply.DISMISS:
+            if notification.dismissed:
+                logger.info(f"Notification {id_notification} already dismissed")
+                return
             notification.dismissed = True
             user.notifications[id_notification] = notification
             firestore.client.users.update(user, "notifications")
