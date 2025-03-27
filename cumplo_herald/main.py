@@ -2,7 +2,7 @@ import warnings
 from logging import DEBUG, ERROR, INFO, basicConfig, getLogger
 
 import google.cloud.logging
-from cumplo_common.dependencies.authentication import authenticate
+from cumplo_common.dependencies import authenticate, is_admin
 from cumplo_common.middlewares import PubSubMiddleware
 from fastapi import Depends, FastAPI
 
@@ -28,4 +28,7 @@ app = FastAPI()
 app.add_middleware(PubSubMiddleware)
 
 app.include_router(common.router, dependencies=[Depends(authenticate)])
-app.include_router(whatsapp.router)
+app.include_router(whatsapp.public.router)
+
+# NOTE: This router is used for demo purposes only.
+app.include_router(whatsapp.private.router, dependencies=[Depends(authenticate), Depends(is_admin)])
