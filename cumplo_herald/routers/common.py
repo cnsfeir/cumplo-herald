@@ -43,7 +43,7 @@ async def notify_event(request: Request, event: PublicEvent, payload: dict) -> N
 
     notification = Notification.new(event=event, content_id=content.id)
     user.notifications[notification.id] = notification
-    firestore.client.users.put(user)
+    firestore.client.users.update(user, "notifications")
 
 
 @router.post("/notifications/clear", status_code=HTTPStatus.NO_CONTENT)
@@ -56,4 +56,4 @@ async def clear_notifications() -> None:
                 logger.info(f"Deleting expired notification {key} for user {user.name}")
                 del user.notifications[key]
 
-        firestore.client.users.put(user)
+        firestore.client.users.update(user, "notifications")
