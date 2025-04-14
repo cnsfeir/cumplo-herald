@@ -80,7 +80,7 @@ async def whatsapp_webhook(
                 return
             notification.dismissed = True
             user.notifications[id_notification] = notification
-            firestore.client.users.update(user, "notifications")
+            firestore.client.users.update_notification(user, notification.id)
             response = f"*Funding Request N° {notification.content_id}*\n🔕 *Dismissed*"
         case _:
             logger.warning(f"Unknown button text: {text}")
