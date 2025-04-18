@@ -45,7 +45,7 @@ async def notify_event(request: Request, event: PublicEvent, payload: dict) -> N
 
     notification = Notification.new(event=event, content_id=content.id)
     user.notifications[notification.id] = notification
-    firestore.client.users.update_notification(user, notification.id)
+    firestore.client.users.update(user, "notifications")
 
 
 @router.post("/notifications/clear", status_code=HTTPStatus.NO_CONTENT)
