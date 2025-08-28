@@ -31,6 +31,10 @@ async def notify_event(request: Request, event: PublicEvent, payload: dict) -> N
     if not user.should_notify(event, content):
         raise HTTPException(HTTPStatus.ALREADY_REPORTED)
 
+    notification = Notification.new(event=event, content_id=content.id)
+    user.notifications[notification.id] = notification
+    firestore.client.users.update(user, "notifications")
+
     for channel_configuration in user.channels.values():
         if not channel_configuration.enabled:
             logger.info(f"Channel {channel_configuration.id} is disabled")
@@ -42,10 +46,6 @@ async def notify_event(request: Request, event: PublicEvent, payload: dict) -> N
 
         channel = CHANNELS_BY_TYPE[channel_configuration.type_](user, channel_configuration)
         channel.notify(event, content)
-
-    notification = Notification.new(event=event, content_id=content.id)
-    user.notifications[notification.id] = notification
-    firestore.client.users.update(user, "notifications")
 
 
 @router.post("/notifications/clear", status_code=HTTPStatus.NO_CONTENT)
